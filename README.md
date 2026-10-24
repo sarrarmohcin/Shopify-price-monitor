@@ -109,6 +109,13 @@ images or descriptions; show the data only to the user who tracks the store.
 - [ ] AI weekly competitor briefing
 - [ ] Shopify app
 
+## 📬 Contact
+
+Feel free to reach out:
+
+- 📧 Email: sarrar.mohcin@gmail.com
+- 🌐 Upwork: https://www.upwork.com/freelancers/~01901f654ceb7c53fc
+
 ## License
 
 MIT
