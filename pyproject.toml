@@ -1,0 +1,15 @@
+[project]
+name = "shopify-price-monitor"
+version = "0.1.0"
+description = "Track competitor prices, discounts, launches and stock on Shopify stores."
+requires-python = ">=3.10"
+readme = "README.md"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+pythonpath = [".", "tests"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

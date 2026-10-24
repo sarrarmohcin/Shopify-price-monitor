@@ -1,0 +1,27 @@
+name: Scheduled scrape
+
+# Free scheduler for the demo: scrapes every tracked store twice a day into your
+# hosted PostgreSQL (Neon / Supabase). Add DATABASE_URL under
+# Settings > Secrets and variables > Actions.
+on:
+  schedule:
+    - cron: "17 6,18 * * *"      # 06:17 and 18:17 UTC
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m spm.cli scrape --all
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - run: python -m spm.cli events --days 1 --limit 50
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}

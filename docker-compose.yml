@@ -1,0 +1,34 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: spm
+      POSTGRES_PASSWORD: spm
+      POSTGRES_DB: spm
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U spm"]
+      interval: 5s
+      retries: 10
+
+  app:
+    build: .
+    ports: ["8501:8501"]
+    environment:
+      DATABASE_URL: postgresql://spm:spm@db:5432/spm
+      SPM_DEMO_ALLOW_TRACKING: "true"
+    depends_on:
+      db: { condition: service_healthy }
+
+  scheduler:
+    build: .
+    environment:
+      DATABASE_URL: postgresql://spm:spm@db:5432/spm
+    command: >
+      sh -c "while true; do python -m spm.cli scrape --all; sleep 43200; done"
+    depends_on:
+      db: { condition: service_healthy }
+
+volumes:
+  pgdata:
