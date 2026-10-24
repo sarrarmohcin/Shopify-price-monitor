@@ -1,16 +1,14 @@
 # 📈 Shopify Price Monitor
 
 Track your competitors' Shopify stores automatically: **price changes, discounts, sitewide
-sales, new launches, removed products and stock-outs**, with a public demo that analyzes any
-store in seconds.
+sales, new launches, removed products and stock-outs**.
 
-> **Live demo:** `https://your-app.streamlit.app` <!-- replace after deploying -->
 
-<!-- Add a GIF of the demo here: docs/demo.gif -->
+![Shopify Price Monitor demo](demo.gif)
 
 ## Features
 
-**Instant store analysis** (no signup, no database)
+**Instant store analysis** 
 - Catalog size, median price, share of products on sale, average discount, sold-out rate
 - Price distribution and discount-depth histograms
 - Category breakdown with median price, sale rate and stock-out rate
@@ -18,7 +16,7 @@ store in seconds.
 - Pricing psychology (.99 / .95 / .00 price endings), top vendors
 - Biggest discounts and newest products, full catalog CSV export
 
-**Continuous tracking** (database + scheduler)
+**Continuous tracking** 
 - Snapshot of every variant on each scrape
 - Change events: `price_drop`, `price_increase`, `sale_started`, `sale_ended`,
   `new_product`, `product_removed`, `out_of_stock`, `back_in_stock`
@@ -28,7 +26,7 @@ store in seconds.
 ## How it works
 
 ```
- Shopify store /products.json ──► scraper.py ──► pipeline.py ──► PostgreSQL / SQLite
+ Shopify store ──► scraper.py ──► pipeline.py ──► PostgreSQL / SQLite
    (public, 250 per page)          normalize      upsert + snapshot        │
                                                   diff.py → events         │
                                                                            ▼
@@ -51,7 +49,6 @@ store in seconds.
 ```bash
 git clone https://github.com/your-username/shopify-price-monitor.git
 cd shopify-price-monitor
-python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements-dev.txt
 
 # One-off analysis to CSV (no database needed)
@@ -73,15 +70,6 @@ With PostgreSQL and a built-in scheduler (scrapes every 12 h):
 docker compose up --build        # app on http://localhost:8501
 ```
 
-## Deploying the demo for free
-
-1. Create a free PostgreSQL database on **Neon** or **Supabase** and copy its connection URL.
-2. **Streamlit Community Cloud** → New app → this repo → `app/streamlit_app.py`.
-   Under *Secrets*, add `DATABASE_URL = "postgresql://..."`.
-3. In GitHub → *Settings → Secrets → Actions*, add the same `DATABASE_URL`.
-   `.github/workflows/scrape.yml` then scrapes all tracked stores twice a day.
-4. Seed 5–10 demo stores so the *Tracked stores* tab has history:
-   `DATABASE_URL=... python -m spm.cli add store1.com store2.com ...`
 
 ## Configuration
 
@@ -97,13 +85,6 @@ All settings are environment variables (see `.env.example`):
 | `SPM_DEMO_MAX_ANALYSES` | `10` | Analyses per browser session |
 | `SPM_DEMO_ALLOW_TRACKING` | `false` | Show the "Track this store" button |
 
-## Tests
-
-```bash
-pytest -q
-```
-
-Tests use fake HTTP responses and an in-memory SQLite database, so they never hit the network.
 
 ## Limitations
 
